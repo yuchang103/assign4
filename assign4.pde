@@ -1,4 +1,4 @@
-final int GAME_START=1,GAME_LOSE=2,GAME_RUN=3;
+
 int gameState=GAME_START;
 int x1,y1;//fighter
 int x2,y2;//treasure
