@@ -8,7 +8,6 @@ int hp;//hp
 int i;
 int xx=0;
 int jj=0;
-int second=second();
 boolean s;
 int numFrames=5;
 int currentFrame;
