@@ -5,8 +5,7 @@ int x2,y2;//treasure
 int x3,y3;//enemy
 int xb1,xb2;//background
 int hp;//hp
-int i,xxx,yyy;
-int xx=0;
+int i,xx=0;
 int []aa=new int[20];
 int jj=0;
 boolean s;
