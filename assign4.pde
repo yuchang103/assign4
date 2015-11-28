@@ -146,7 +146,11 @@ void draw()
    addEnemy(a%3); 
   }
   if(isHit(x1,y1,50,50,x2,y2,30,30)==true){
+   if(hp+=20>=200){
+   hp=200;
+   }else{
     hp+=20;
+    }
     x2=floor(random(3,300));
     y2=floor(random(3,277));
   }
