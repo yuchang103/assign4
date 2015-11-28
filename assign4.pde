@@ -1,26 +1,9 @@
 final int GAME_START=1,GAME_LOSE=2,GAME_RUN=3;
-int gameState=GAME_START;
-int x1,y1;//fighter
-int x2,y2;//treasure
-int x3,y3;//enemy
-int xb1,xb2;//background
-int hp;//hp
-int i,xx=0;
-int []aa=new int[20];
-int jj=0;
-boolean s;
-int []xi=new int[20];
-int []yi=new int[20];
-int numFrames=5;
-int currentFrame;
-int []x=new int[20];
-int []xs=new int[5];
-int []ys=new int[5];
-PImage []images=new PImage[numFrames];
+int gameState=GAME_START, numFrames=5;;
+PImage enemy;
 PImage sImg;
 PImage aImg;
 PImage bImg;
-PImage cImg;
 PImage d1Img;
 PImage d2Img;
 PImage hpImg;
@@ -28,37 +11,37 @@ PImage start1Img;
 PImage start2Img;
 PImage end1Img;
 PImage end2Img;
-float V = 5;
-boolean []xPressed = new boolean[20];
+int []xs=new int[5];
+int []ys=new int[5];
+int []xi=new int[8];
+int []yi=new int[8];
+int []aa=new int[8];
+PImage []images=new PImage[numFrames];
+int enemyCount = 8;
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
-boolean ss = false;
+int x1,y1;//fighter
+int x2,y2;//treasure
+int xb1,xb2;//background
+int hp;//hp
+int a=0;
+int jj=0,i;
+int type;
+int[] enemyX = new int[enemyCount];
+int[] enemyY = new int[enemyCount];
+boolean []xPressed = new boolean[8];
+int xx=0,V=7;
 
-void setup(){
-  size(640,480);
+void setup () {
+  size(640, 480) ;
   for(int i=0;i<numFrames;i++){
    images[i]= loadImage("img/flame"+(i+1)+".png");
   }
-  xs[0] = -100;
-  xs[1] = -100;
-  xs[2] = -100;
-  xs[3] = -100;
-  xs[4] = -100;
-  xb1=640;
-  xb2=0;
-  x1=530;
-  y1=200;
-  x3=-60;
-  y3=floor(random(20,400));
-  x2=floor(random(3,300));
-  y2=floor(random(3,277));
-  hp=40;
   sImg=loadImage("img/shoot.png");
   aImg=loadImage("img/fighter.png");
   bImg=loadImage("img/treasure.png");
-  cImg=loadImage("img/enemy.png");
   d1Img=loadImage("img/bg1.png");
   d2Img=loadImage("img/bg2.png");
   hpImg=loadImage("img/hp.png");
@@ -66,14 +49,29 @@ void setup(){
   start2Img=loadImage("img/start2.png");
   end1Img=loadImage("img/end1.png");
   end2Img=loadImage("img/end2.png");
-  for(i=0;i<20;i++){
-   x[i]=0; 
+  enemy = loadImage("img/enemy.png");
+  a=0;
+  xb1=640;
+  xb2=0;
+  x1=530;
+  y1=200;
+  x2=floor(random(3,300));
+  y2=floor(random(3,277));
+  hp=40;
+  addEnemy(0);
+  for(i=0;i<5;i++){
+   xs[i]=0;
+   ys[i]=0;
+  }
+  for(i=0;i<8;i++){
    xPressed[i] = false;
-   aa[i]=0;
+   aa[i]=0; 
   }
 }
 
-void draw(){
+void draw()
+{
+  background(0);
   switch(gameState){
     case GAME_START:
     image(start2Img,0,0);
@@ -83,9 +81,9 @@ void draw(){
     if(mousePressed&&mouseX>200&&mouseX<460&&mouseY>375&&mouseY<415){
      gameState=GAME_RUN; 
     }
-    break;
+    break;//........................................................................................
     case GAME_RUN:
-  if (upPressed) {
+    if (upPressed) {
     y1 -= V;
     if(y1<0){
      y1=0; 
@@ -124,15 +122,6 @@ void draw(){
        ys[i]=500; 
       }
       }
-  
-  if(((x1>=x2 && x1<=x2+40) && (y1+25>=y2 && y1+25<=y2+40))||((x1+25>=x2 && x1+25<=x2+40) && (y1>=y2 && y1<=y2+40))||((x1+25>=x2 && x1+25<=x2+40) && (y1+50>=y2 && y1+50<=y2+40))||((x1+50>=x2 && x1+50<=x2+40) && (y1>=y2 && y1<=y2+40))||((x1+50>=x2 && x1+50<=x2+40) && (y1+50>=y2 && y1+50<=y2+40))||((x1+50>=x2 && x1+25<=x2+40) && (y1+50>=y2 && y1+25<=y2+40))){
-    x2=floor(random(3,300));
-    y2=floor(random(3,277));
-    hp+=20;
-    if(hp>200){
-     hp=200; 
-    }
-  }
   image(d1Img,xb1-640,0);
   xb1=xb1+1;
   xb1%=1280;
@@ -140,166 +129,10 @@ void draw(){
   xb2=xb2+1;
   xb2%=1280;
   image(bImg,x2,y2);
+  image(aImg,x1,y1);
   for(i=0;i<5;i++){
   image(sImg,xs[i],ys[i]);
   }
-  if(x3>=3000){
-   x3=-60; 
-  }
-  if(x3>-1&&x3<2){
-    y3=floor(random(3,277));
-    for(i=0;i<20;i++){
-    x[i]=0; 
-    }
-  }
-  if(x3>935&&x3<938){
-    y3=floor(random(10,200));
-    for(i=0;i<20;i++){
-    x[i]=0; 
-    }
-  }
-  if(x3>1979&&x3<1985){
-    y3=floor(random(100,300));
-    for(i=0;i<20;i++){
-    x[i]=0; 
-    }
-  }
-  for(i=0;i<15;i++){
-    if(i<5){
-    if(((x1>=x3-(60*i)%3000-60 && x1<=x3-(60*i)%3000-60+60) && (y1+25>=y3+x[i] && y1+25<=y3+60+x[i]))||((x1+25>=x3-(60*i)%3000-60 && x1+25<=x3-(60*i)%3000-60+60) && (y1>=y3+x[i] && y1<=y3+60+x[i]))||((x1+25>=x3-(60*i)%3000-60 && x1+25<=x3-(60*i)%3000-60+60) && (y1+50>=y3+x[i] && y1+50<=y3+60+x[i]))||((x1+50>=x3-(60*i)%3000-60 && x1+50<=x3-(60*i)%3000-60+60) && (y1>=y3+x[i] && y1<=y3+x[i]+60))||((x1+50>=x3-(60*i)%3000-60 && x1+50<=x3-(60*i)%3000-60+60) && (y1+50>=y3+x[i] && y1+50<=y3+x[i]+60))||((x1+50>=x3-(60*i)%3000-60 && x1+25<=x3-(60*i)%3000-60+60) && (y1+50>=y3+x[i] && y1+25<=y3+x[i]+60))){
-    x[i]=1000;
-    xi[i]=x3-(60*i)%3000-60;
-    yi[i]=y3;
-    xPressed[i]=true;
-    if(hp<=40){
-    gameState=GAME_LOSE; 
-    }else{
-    hp-=40;
-    }}
-    for(int iii=0;iii<5;iii++){
-    if(((xs[iii]>=x3-(60*i)%3000-60 && xs[iii]<=x3-(60*i)%3000-60+60) && (ys[iii]+20>=y3+x[i] && ys[iii]+20<=y3+60+x[i]))||((xs[iii]+20>=x3-(60*i)%3000-60 && xs[iii]+20<=x3-(60*i)%3000-60+60) && (ys[iii]>=y3+x[i] && ys[iii]<=y3+60+x[i]))||((xs[iii]+20>=x3-(60*i)%3000-60 && xs[iii]+20<=x3-(60*i)%3000-60+60) && (ys[iii]+20>=y3+x[i] && ys[iii]+20<=y3+60+x[i]))||((xs[iii]+20>=x3-(60*i)%3000-60 && xs[iii]+20<=x3-(60*i)%3000-60+60) && (ys[iii]>=y3+x[i] && ys[iii]<=y3+x[i]+60))||((xs[iii]+20>=x3-(60*i)%3000-60 && xs[iii]+20<=x3-(60*i)%3000-60+60) && (ys[iii]+20>=y3+x[i] && ys[iii]+20<=y3+x[i]+60))||((xs[iii]+20>=x3-(60*i)%3000-60 && xs[iii]+20<=x3-(60*i)%3000-60+60) && (ys[iii]+20>=y3+x[i] && ys[iii]+20<=y3+x[i]+60))){  
-    if(xs[iii]>0){
-    x[i]=1000;
-    ys[iii]=500;
-    xi[i]=(x3-60*i)%3000-60;
-    yi[i]=y3;
-    xPressed[i]=true;
-    }}}
-    image(cImg,(x3-60*i)%3000-60,y3+x[i]);
-    }
-    if(i>=5&&i<10){
-    if(((x1>=(x3-801-51*i)%3000-60 && x1<=(x3-801-51*i)%3000-60+60) && (y1+25>=y3+x[i]+50*(i-5) && y1+25<=y3+x[i]+50*(i-5)+60))||((x1+25>=(x3-801-51*i)%3000-60 && x1+25<=(x3-801-51*i)%3000-60+60) && (y1>=y3+x[i]+50*(i-5) && y1<=y3+x[i]+50*(i-5)+60))||((x1+25>=(x3-801-51*i)%3000-60 && x1+25<=(x3-801-51*i)%3000-60+60) && (y1+50>=y3+x[i]+50*(i-5) && y1+50<=y3+x[i]+50*(i-5)+60))||((x1+50>=(x3-801-51*i)%3000-60 && x1+50<=(x3-801-51*i)%3000-60+60) && (y1>=y3+x[i]+50*(i-5) && y1<=y3+x[i]+50*(i-5)+60))||((x1+50>=(x3-801-51*i)%3000-60 && x1+50<=(x3-801-51*i)%3000-60+60) && (y1+50>=y3+x[i]+50*(i-5) && y1+50<=y3+x[i]+50*(i-5)+60))||((x1+50>=(x3-801-51*i)%3000-60 && x1+25<=(x3-801-51*i)%3000-60+60) && (y1+50>=y3+x[i]+50*(i-5) && y1+25<=y3+x[i]+50*(i-5)+60))){
-    x[i]=1000;
-    xi[i]=(x3-801-51*i)%3000-60;
-    yi[i]=y3+50*(i-5);
-    xPressed[i]=true;
-    if(hp<=40){
-    gameState=GAME_LOSE; 
-    }else{
-    hp-=40;
-    }}
-    for(int iii=0;iii<5;iii++){
-    if(((xs[iii]>=(x3-801-51*i)%3000-60 && xs[iii]<=(x3-801-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-5)+x[i] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-801-51*i)%3000-60 && xs[iii]+20<=(x3-801-51*i)%3000-60+60) && (ys[iii]>=y3+50*(i-5)+x[i] && ys[iii]<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-801-51*i)%3000-60 && xs[iii]+20<=(x3-801-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-5)+x[i] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-801-51*i)%3000-60 && xs[iii]+20<=(x3-801-51*i)%3000-60+60) && (ys[iii]>=y3+50*(i-5)+x[i] && ys[iii]<=y3+50*(i-5)+x[i]+60))||((xs[iii]+20>=(x3-801-51*i)%3000-60 && xs[iii]+20<=(x3-801-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-5)+x[i] && ys[iii]+20<=y3+50*(i-5)+x[i]+60))||((xs[iii]+20>=(x3-801-51*i)%3000-60 && xs[iii]+20<=(x3-801-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-5)+x[i] && ys[iii]+20<=y3+50*(i-5)+x[i]+60))){    
-    if(xs[iii]>0){
-    x[i]=1000;
-    ys[iii]=500;
-    xi[i]=(x3-801-51*i)%3000-60;
-    yi[i]=y3+50*(i-5);
-    xPressed[i]=true;
-    }}}
-    image(cImg,(x3-801-51*i)%3000-60,y3+50*(i-5)+x[i]);
-    }                                                       //okokokokokokokokok
-    if(i>=10&&i<=12){
-    if(((x1>=(x3-1602-51*i)%3000-60 && x1<=(x3-1602-51*i)%3000-60+60) && (y1+25>=y3+x[i]+50*(i-10) && y1+25<=y3+x[i]+50*(i-10)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[i]+50*(i-10) && y1<=y3+x[i]+50*(i-10)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i]+50*(i-10) && y1+50<=y3+x[i]+50*(i-10)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[i]+50*(i-10) && y1<=y3+x[i]+50*(i-10)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i]+50*(i-10) && y1+50<=y3+x[i]+50*(i-10)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i]+50*(i-10) && y1+25<=y3+x[i]+50*(i-10)+60))){
-    x[i]=1000;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3+50*(i-10);
-    xPressed[i]=true;
-    if(hp<=40){
-    gameState=GAME_LOSE; 
-    }else{
-    hp-=40;
-    }}
-    for(int iii=0;iii<5;iii++){
-    if(((xs[iii]>=(x3-1602-51*i)%3000-60 && xs[iii]<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-10)+x[i] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3+50*(i-10)+x[i] && ys[iii]<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-10)+x[i] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3+50*(i-10)+x[i] && ys[iii]<=y3+50*(i-10)+x[i]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-10)+x[i] && ys[iii]+20<=y3+50*(i-10)+x[i]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+50*(i-10)+x[i] && ys[iii]+20<=y3+50*(i-10)+x[i]+60))){    
-    if(xs[iii]>0){
-    x[i]=1000;
-    ys[iii]=500;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3+50*(i-10);
-    xPressed[i]=true;
-    }}}
-    image(cImg,(x3-1602-51*i)%3000-60,y3+50*(i-10)+x[i]);
-                                                           //okokokokokokokokok
-    if(((x1>=(x3-1602-51*i)%3000-60 && x1<=(x3-1602-51*i)%3000-60+60) && (y1+25>=y3+x[i+3]-50*(i-10) && y1+25<=y3+x[i+3]-50*(i-10)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[i+3]-50*(i-10) && y1<=y3+x[i+3]-50*(i-10)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i+3]-50*(i-10) && y1+50<=y3+x[i+3]-50*(i-10)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[i+3]-50*(i-10) && y1<=y3+x[i+3]-50*(i-10)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i+3]-50*(i-10) && y1+50<=y3+x[i+3]-50*(i-10)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i+3]-50*(i-10) && y1+25<=y3+x[i+3]-50*(i-10)+60))){    
-    x[i+3]=1000;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3-50*(i-10);
-    xPressed[i]=true;
-    if(hp<=40){
-    gameState=GAME_LOSE; 
-    }else{
-    hp-=40;
-    }}
-    for(int iii=0;iii<5;iii++){
-    if(((xs[iii]>=(x3-1602-51*i)%3000-60 && xs[iii]<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-50*(i-10)+x[i+3] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3-50*(i-10)+x[i+3] && ys[iii]<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-50*(i-10)+x[i+3] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3-50*(i-10)+x[i+3] && ys[iii]<=y3-50*(i-10)+x[i+3]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-50*(i-10)+x[i+3] && ys[iii]+20<=y3-50*(i-10)+x[i+3]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-50*(i-10)+x[i+3] && ys[iii]+20<=y3-50*(i-10)+x[i+3]+60))){    
-    if(xs[iii]>0){
-    x[i+3]=1000;
-    ys[iii]=500;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3-50*(i-10);
-    xPressed[i]=true;
-    }}}
-    image(cImg,(x3-1602-51*i)%3000-60,y3-50*(i-10)+x[i+3]);
-    }                                        //...............................................................
-    if(i==13){
-    if(((x1>=(x3-1602-51*i)%3000-60 && x1<=(x3-1602-51*i)%3000-60+60) && (y1+25>=y3+x[19]-100+50*(i-12) && y1+25<=y3+x[19]-100+50*(i-12)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[19]-100+50*(i-12) && y1<=y3+x[19]-100+50*(i-12)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[19]-100+50*(i-12) && y1+50<=y3+x[19]-100+50*(i-12)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[19]-100+50*(i-12) && y1<=y3+x[19]-100+50*(i-12)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[19]-100+50*(i-12) && y1+50<=y3+x[19]-100+50*(i-12)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[19]-100+50*(i-12) && y1+25<=y3+x[19]-100+50*(i-12)+60))){    
-    x[19]=1000;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3-100+50*(i-12);
-    xPressed[i]=true;
-    if(hp<=40){
-    gameState=GAME_LOSE; 
-    }else{
-    hp-=40;
-    }}
-    for(int iii=0;iii<5;iii++){
-    if(((xs[iii]>=(x3-1602-51*i)%3000-60 && xs[iii]<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-100+50*(i-12)+x[19] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3-100+50*(i-12)+x[19] && ys[iii]<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-100+50*(i-12)+x[19] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3-100+50*(i-12)+x[19] && ys[iii]<=y3-100+50*(i-12)+x[19]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-100+50*(i-12)+x[19] && ys[iii]+20<=y3-100+50*(i-12)+x[19]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3-100+50*(i-12)+x[19] && ys[iii]+20<=y3-100+50*(i-12)+x[19]+60))){
-    if(xs[iii]>0){
-    x[19]=1000;
-    ys[iii]=500;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3-100+50*(i-12);
-    xPressed[i]=true;
-    }}}
-    image(cImg,(x3-1602-51*i)%3000-60,y3-100+50*(i-12)+x[19]);
-    }                                      //....................................
-    if(i>=13&&i<15){
-    if(((x1>=(x3-1602-51*i)%3000-60 && x1<=(x3-1602-51*i)%3000-60+60) && (y1+25>=y3+x[i+3]+100-50*(i-12) && y1+25<=y3+x[i+3]+100-50*(i-12)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[i+3]+100-50*(i-12) && y1<=y3+x[i+3]+100-50*(i-12)+60))||((x1+25>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i+3]+100-50*(i-12) && y1+50<=y3+x[i+3]+100-50*(i-12)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1>=y3+x[i+3]+100-50*(i-12) && y1<=y3+x[i+3]+100-50*(i-12)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+50<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i+3]+100-50*(i-12) && y1+50<=y3+x[i+3]+100-50*(i-12)+60))||((x1+50>=(x3-1602-51*i)%3000-60 && x1+25<=(x3-1602-51*i)%3000-60+60) && (y1+50>=y3+x[i+3]+100-50*(i-12) && y1+25<=y3+x[i+3]+100-50*(i-12)+60))){    
-    x[i+3]=1000;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3+100-50*(i-12);
-    xPressed[i]=true;
-    if(hp<=40){
-    gameState=GAME_LOSE; 
-    }else{
-    hp-=40;
-    }}
-    for(int iii=0;iii<5;iii++){
-    if(((xs[iii]>=(x3-1602-51*i)%3000-60 && xs[iii]<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+100-50*(i-12)+x[i+3] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3+100-50*(i-12)+x[i+3] && ys[iii]<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+100-50*(i-12)+x[i+3] && ys[iii]+20<=y3+50*(i-5)+60+x[i]))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]>=y3+100-50*(i-12)+x[i+3] && ys[iii]<=y3+100-50*(i-12)+x[i+3]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+100-50*(i-12)+x[i+3] && ys[iii]+20<=y3+100-50*(i-12)+x[i+3]+60))||((xs[iii]+20>=(x3-1602-51*i)%3000-60 && xs[iii]+20<=(x3-1602-51*i)%3000-60+60) && (ys[iii]+20>=y3+100-50*(i-12)+x[i+3] && ys[iii]+20<=y3+100-50*(i-12)+x[i+3]+60))){
-    if(xs[iii]>0){
-    x[i+3]=1000;
-    ys[iii]=500;
-    xi[i]=(x3-1602-51*i)%3000-60;
-    yi[i]=y3+100-50*(i-12);
-    xPressed[i]=true;
-    }}}
-    image(cImg,(x3-1602-51*i)%3000-60,y3+100-50*(i-12)+x[i+3]);
-    }
-    }
-  
-  x3=x3+3;
-  image(aImg,x1,y1);
   colorMode(RGB);
   
   fill(255,0,0);
@@ -307,7 +140,33 @@ void draw(){
   rect(11,16,hp,13);
   
   image(hpImg,10,10);
-  for(i=0;i<20;i++){
+  if(((a%3==0||a%3==1)&&enemyX[4]>700)||(a%3==2&&enemyX[7]>700)){
+    a++;
+   addEnemy(a%3); 
+  }
+  if(isHit(x1,y1,50,50,x2,y2,30,30)==true){
+    hp+=20;
+    x2=floor(random(3,300));
+    y2=floor(random(3,277));
+  }
+  for(i=0;i<8;i++){
+  if(isHit(x1,y1,50,50,enemyX[i],enemyY[i],60,60)==true){
+    hp-=40;
+    xi[i]=enemyX[i];
+    yi[i]=enemyY[i];
+    xPressed[i]=true;
+    enemyY[i]=-100;
+  }}
+  for(int jj=0;jj<5;jj++){
+  for(i=0;i<8;i++){
+  if(isHit(xs[jj],ys[jj],40,40,enemyX[i],enemyY[i],60,60)==true&&xs[jj]>0){
+    xi[i]=enemyX[i];
+    yi[i]=enemyY[i];
+    xPressed[i]=true;
+    enemyY[i]=-100;
+    ys[jj]=500;
+  }}}
+  for(i=0;i<8;i++){
   if(xPressed[i]==true&&frameCount%(60/6)==0&&aa[i]<6){
   aa[i]++;
   image(images[aa[i]%5],xi[i],yi[i]);
@@ -316,36 +175,103 @@ void draw(){
   xPressed[i]=false;
   aa[i]=0;
   }}
-  break;
+  for (int i = 0; i < enemyCount; ++i) {
+    if (enemyX[i] != -1 || enemyY[i] != -1) {
+      image(enemy, enemyX[i], enemyY[i]);
+      enemyX[i]+=5;
+      xx+=5;
+    }
+  }
+  break;//........................................................................................
     case GAME_LOSE:
     image(end2Img,0,0);
     if(mouseX>210&&mouseX<440&&mouseY>305&&mouseY<350){
       image(end1Img,0,0);
     }
     if(mousePressed&&mouseX>210&&mouseX<440&&mouseY>305&&mouseY<350){
-     gameState=GAME_RUN; 
-     xb1=640;
-     xb2=0;
-     x1=530;
-     y1=200;
-     x3=-60;
-     xs[0] = -100;
-     xs[1] = -100;
-     xs[2] = -100;
-     xs[3] = -100;
-     xs[4] = -100;
-     y3=floor(random(20,400));
-     x2=floor(random(3,300));
-     y2=floor(random(3,277));
-     hp=40;
-    }
-   for(i=0;i<20;i++){
-   x[i]=0; 
-   xPressed[i] = false;
-   aa[i]=0;
+     
   }
-    break;
-}}
+    break;//........................................................................................
+  }
+}
+
+// 0 - straight, 1-slope, 2-dimond
+void addEnemy(int type)
+{  
+  for (int i = 0; i < enemyCount; ++i) {
+    enemyX[i] = -1;
+    enemyY[i] = -1;
+  }
+  switch (type) {
+    case 0:
+      addStraightEnemy();
+      break;
+    case 1:
+      addSlopeEnemy();
+      break;
+    case 2:
+      addDiamondEnemy();
+      break;
+  }
+}
+
+void addStraightEnemy()
+{
+  float t = random(height - enemy.height);
+  int h = int(t);
+  for (int i = 0; i < 5; ++i) {
+
+    enemyX[i] = (i+1)*-80;
+    enemyY[i] = h;
+  }
+}
+void addSlopeEnemy()
+{
+  float t = random(height - enemy.height * 5);
+  int h = int(t);
+  for (int i = 0; i < 5; ++i) {
+    enemyX[i] = (i+1)*-80;
+    enemyY[i] = h + i * 40;
+  }
+}
+void addDiamondEnemy()
+{
+  float t = random( enemy.height * 3 ,height - enemy.height * 3);
+  int h = int(t);
+  int x_axis = 1;
+  for (int i = 0; i < 8; ++i) {
+    if (i == 0 || i == 7) {
+      enemyX[i] = x_axis*-80;
+      enemyY[i] = h;
+      x_axis++;
+    }
+    else if (i == 1 || i == 5){
+      enemyX[i] = x_axis*-80;
+      enemyY[i] = h + 1 * 40;
+      enemyX[i+1] = x_axis*-80;
+      enemyY[i+1] = h - 1 * 40;
+      i++;
+      x_axis++;
+      
+    }
+    else {
+      enemyX[i] = x_axis*-80;
+      enemyY[i] = h + 2 * 40;
+      enemyX[i+1] = x_axis*-80;
+      enemyY[i+1] = h - 2 * 40;
+      i++;
+      x_axis++;
+    }
+  }
+}
+
+boolean isHit(int ax,int ay,int ah,int aw,int bx,int by,int bh,int bw){
+ if(((ax>=bx && ax<=bx+bw) && (ay+(1/2)*ah>=by && ay+(1/2)*ah<=by+bh))||((ax+(1/2)*aw>=bx && ax+(1/2)*aw<=bx+bw) && (ay>=by && ay<=by+bh))||((ax+(1/2)*aw>=bx && ax+(1/2)*aw<=bx+bw) && (ay+ah>=by && ay+ah<=by+bh))||((ax+aw>=bx && ax+aw<=bx+bw) && (ay>=by && ay<=by+bh))||((ax+aw>=bx && ax+aw<=bx+bw) && (ay+ah>=by && ay+ah<=by+bh))||((ax+aw>=bx && ax+(1/2)*aw<=bx+bw) && (ay+ah>=by && ay+(1/2)*ah<=by+bh))) {
+   return true;
+ }else{
+  return false; 
+ }
+ }
 
 void keyPressed() {
   if (key == CODED) { // detect special keys 
