@@ -27,7 +27,7 @@ int x2,y2;//treasure
 int xb1,xb2;//background
 int hp;//hp
 int a=0;
-int jj=0,i;
+int jj=0,i,jjj;
 int type;
 int[] enemyX = new int[enemyCount];
 int[] enemyY = new int[enemyCount];
@@ -53,6 +53,7 @@ void setup () {
   a=0;
   xb1=640;
   xb2=0;
+  jjj=0;
   x1=530;
   y1=200;
   x2=floor(random(3,300));
@@ -112,9 +113,9 @@ void draw()
   if (keyPressed) {
     if (key == ' ') {
       if(xs[jj%5]<-20||ys[jj%5]==500){
-      xs[jj%5]=x1;
-      ys[jj%5]=y1+10;
-      jj++;
+      xs[jjj%5]=x1;
+      ys[jjj%5]=y1+10;
+      jjj++;
       }}}}
       for(i=0;i<5;i++){
       xs[i] -= 6;
@@ -190,6 +191,7 @@ void draw()
     a=0;
   xb1=640;
   xb2=0;
+  jjj=0;
   x1=530;
   y1=200;
   x2=floor(random(3,300));
