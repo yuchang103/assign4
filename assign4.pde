@@ -112,7 +112,7 @@ void draw()
   if(xx%(5)==0){
   if (keyPressed) {
     if (key == ' ') {
-      if(xs[jj%5]<-20||ys[jj%5]==500){
+      if(xs[jjj%5]<-20||ys[jjj%5]==500){
       xs[jjj%5]=x1;
       ys[jjj%5]=y1+10;
       jjj++;
