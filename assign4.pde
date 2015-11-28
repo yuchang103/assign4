@@ -156,7 +156,9 @@ void draw()
     yi[i]=enemyY[i];
     xPressed[i]=true;
     enemyY[i]=-100;
-  }}
+    if(hp<=0){
+     gameState=GAME_LOSE; 
+  }}}
   for(int jj=0;jj<5;jj++){
   for(i=0;i<8;i++){
   if(isHit(xs[jj],ys[jj],40,40,enemyX[i],enemyY[i],60,60)==true&&xs[jj]>0){
@@ -185,11 +187,28 @@ void draw()
   break;//........................................................................................
     case GAME_LOSE:
     image(end2Img,0,0);
+    a=0;
+  xb1=640;
+  xb2=0;
+  x1=530;
+  y1=200;
+  x2=floor(random(3,300));
+  y2=floor(random(3,277));
+  hp=40;
+  addEnemy(0);
+  for(i=0;i<5;i++){
+   xs[i]=0;
+   ys[i]=0;
+  }
+  for(i=0;i<8;i++){
+   xPressed[i] = false;
+   aa[i]=0; 
+  }
     if(mouseX>210&&mouseX<440&&mouseY>305&&mouseY<350){
       image(end1Img,0,0);
     }
     if(mousePressed&&mouseX>210&&mouseX<440&&mouseY>305&&mouseY<350){
-     
+     gameState=GAME_RUN; 
   }
     break;//........................................................................................
   }
