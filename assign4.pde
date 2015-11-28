@@ -179,7 +179,7 @@ void draw()
   aa[i]=0;
   }}
   for (int i = 0; i < enemyCount; ++i) {
-    if (enemyX[i] != -1 || enemyY[i] != -1) {
+    if (enemyX[i] != -200 || enemyY[i] != -200) {
       image(enemy, enemyX[i], enemyY[i]);
       enemyX[i]+=5;
       xx+=5;
@@ -220,8 +220,8 @@ void draw()
 void addEnemy(int type)
 {  
   for (int i = 0; i < enemyCount; ++i) {
-    enemyX[i] = -1;
-    enemyY[i] = -1;
+    enemyX[i] = -200;
+    enemyY[i] = -200;
   }
   switch (type) {
     case 0:
@@ -244,6 +244,9 @@ void addStraightEnemy()
 
     enemyX[i] = (i+1)*-80;
     enemyY[i] = h;
+  }if(i>=5&&i<8){
+    enemyX[i] =-200;
+    enemyY[i] = -200;
   }
 }
 void addSlopeEnemy()
@@ -253,6 +256,9 @@ void addSlopeEnemy()
   for (int i = 0; i < 5; ++i) {
     enemyX[i] = (i+1)*-80;
     enemyY[i] = h + i * 40;
+  }if(i>=5&&i<8){
+    enemyX[i] =-200;
+    enemyY[i] =-200;
   }
 }
 void addDiamondEnemy()
